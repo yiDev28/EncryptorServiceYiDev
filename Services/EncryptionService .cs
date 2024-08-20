@@ -18,7 +18,7 @@ namespace EncryptorService.Services
             using (Aes aes = Aes.Create())
             {
                 aes.Key = keyBytes;
-                aes.GenerateIV(); // Genera un vector de inicialización (IV)
+                aes.GenerateIV(); // Genera un vector de inicialización(IV)
                 byte[] encrypted = EncryptStringToBytes_Aes(plainText, aes.Key, aes.IV);
 
                 // Combina el IV y los datos encriptados en una sola cadena para simplicidad
@@ -99,20 +99,18 @@ namespace EncryptorService.Services
 
         public string encriptarSHA256(string texto)
         {
-            using (SHA256 sha256Hash = SHA256.Create())
+            using SHA256 sha256Hash = SHA256.Create();
+            // Computar el hash
+            byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(texto));
+
+            // Convertir el array de bytes a string
+            StringBuilder builder = new StringBuilder();
+            for (int i = 0; i < bytes.Length; i++)
             {
-                // Computar el hash
-                byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(texto));
-
-                // Convertir el array de bytes a string
-                StringBuilder builder = new StringBuilder();
-                for (int i = 0; i < bytes.Length; i++)
-                {
-                    builder.Append(bytes[i].ToString("x2"));
-                }
-
-                return builder.ToString();
+                builder.Append(bytes[i].ToString("x2"));
             }
+
+            return builder.ToString();
         }
     }
 }
